@@ -6,7 +6,7 @@ import telegram
 import time
 
 from dotenv import load_dotenv
-from exceptions import KeyLightError, LightError
+from exceptions import EmptyKeyError, EasyError
 
 load_dotenv()
 
@@ -42,7 +42,7 @@ def send_message(bot, message):
         logger.info('Сообщение отправлено')
     except telegram.error.TelegramError as error:
         message = f'Ошибка при отправке сообщения {error}'
-        raise LightError(message)
+        raise EasyError(message)
 
 
 def get_api_answer(current_timestamp):
@@ -64,10 +64,10 @@ def check_response(response):
     """Проверка ответа API на корректность."""
     if isinstance(response, dict):
         if 'homeworks' not in response:
-            raise KeyLightError("Отсутствует поле 'homeworks' в ответе API")
+            raise EmptyKeyError("Отсутствует поле 'homeworks' в ответе API")
         homeworks = response['homeworks']
         if 'current_date' not in response:
-            raise KeyLightError("Отсутствует поле 'current_date' в ответе API")
+            raise EmptyKeyError("Отсутствует поле 'current_date' в ответе API")
         if isinstance(homeworks, list):
             return homeworks
         raise TypeError('Домашки пришли не в виде списка')
@@ -117,7 +117,7 @@ def main():
 
             current_timestamp = response.get('current_date', int(time.time()))
 
-        except LightError as error:
+        except EasyError as error:
             logger.error(error)
 
         except Exception as error:
