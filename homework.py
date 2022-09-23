@@ -50,7 +50,11 @@ def get_api_answer(current_timestamp):
     """Запрос к эндпоинту API-сервиса."""
     timestamp = current_timestamp
     params = {'from_date': timestamp}
-    response = requests.get(ENDPOINT, headers=HEADERS, params=params)
+    try:
+        response = requests.get(ENDPOINT, headers=HEADERS, params=params)
+    except requests.ConnectionError as error: 
+        raise Exception( 
+            'Ошибка при запросе к эндпоинту API-сервиса') from error 
     if response.status_code != 200:
         raise Exception(
             f'Неожиданный ответ сервера: {response.status_code}')
@@ -120,7 +124,7 @@ def main():
         except Exception as error:
             message = f'Сбой в работе программы: {error}'
             send_message(bot, message)
-            break
+            time.sleep(3600)
         finally:
             time.sleep(RETRY_TIME)
 
