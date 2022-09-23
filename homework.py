@@ -52,9 +52,9 @@ def get_api_answer(current_timestamp):
     params = {'from_date': timestamp}
     try:
         response = requests.get(ENDPOINT, headers=HEADERS, params=params)
-    except requests.ConnectionError as error: 
-        raise Exception( 
-            'Ошибка при запросе к эндпоинту API-сервиса') from error 
+    except requests.ConnectionError as error:
+        raise Exception(
+            'Ошибка при запросе к эндпоинту API-сервиса') from error
     if response.status_code != 200:
         raise Exception(
             f'Неожиданный ответ сервера: {response.status_code}')
