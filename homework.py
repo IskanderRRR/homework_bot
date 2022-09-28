@@ -117,6 +117,7 @@ def main():
                 logger.debug('Новые статусы отсутвуют')
 
             current_timestamp = response.get('current_date', int(time.time()))
+            error_message = ''
 
         except EasyError as error:
             logger.error(error)
